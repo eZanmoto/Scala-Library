@@ -3,6 +3,8 @@
 
     <property environment="env"/>
 
+    <property name="main.class"     value="com.ezanmoto.graph.GraphDemo"/>
+
     <property name="production.src" value="src"/>
 
     <property name="build.dir"      value="build"/>
@@ -10,7 +12,8 @@
 
     <property name="scala.home"     value="${env.SCALA_HOME}"/>
 
-    <property name="scala.jar" value="${scala.home}/lib/scala-library.jar"/>
+    <property name="scala.jar"
+              value="${scala.home}/lib/scala-library.jar"/>
 
     <path id="build.classpath">
         <pathelement location="${classes.dir}"/>
@@ -35,7 +38,7 @@
     </target>
 
     <target name="run" depends="compile">
-        <java classname="Hello" classpathref="build.classpath"/>
+        <java classname="${main.class}" classpathref="build.classpath"/>
     </target>
 
 </project>
