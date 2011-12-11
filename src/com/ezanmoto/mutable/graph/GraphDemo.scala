@@ -1,13 +1,13 @@
-package com.ezanmoto.graph
+package com.ezanmoto.mutable.graph
 
 import GraphProperty._
 
 object GraphDemo {
   def main( args: Array[ String ] ) = {
     val graph = new HashGraph[String]( directed )
-    graph addEdge( "a", "b" )
-    graph addEdge( "c", "a" )
-    graph addEdge( "a", "d" )
+    graph addEdge( "a" -> "b" )
+    graph addEdge( "c" -> "a" )
+    graph addEdge( "a" -> "d" )
     println( graph getVerticesAdjacentTo "a" )
   }
 }
