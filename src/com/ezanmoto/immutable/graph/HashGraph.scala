@@ -5,23 +5,22 @@ import GraphProperty._
 class HashGraph[T]( private val vertices: Map[T, Set[T]],
                     private val properties: GraphProperty* ) extends Graph[T] {
 
-  require( this.is( cyclic ), "HashGraph does not support non-cycles" )
+  require( this is cyclic, "HashGraph does not support non-cycles" )
 
-  // val is( ps: GraphProperty* ) = ps forall { properties contains _ }
-  def is( p: GraphProperty ): Boolean = properties contains p
-  def contains( vertex: T ): Boolean = vertices contains vertex
+  def is( p: GraphProperty ) = properties contains p
 
-  private def add( vertex: T ): HashGraph[T] = {
-    if ( ! this.contains( vertex ) )
-      new HashGraph[T]( vertices + ( vertex -> Set[T]() ), properties: _* )
-    else
-      this
-  }
+  def contains( vertex: T ) = vertices contains vertex
 
   def +( vertex: T ): Graph[T] = add( vertex )
 
+  private def add( vertex: T ): HashGraph[T] =
+    if ( this.contains( vertex ) )
+      this
+    else
+      new HashGraph[T]( vertices + ( vertex -> Set[T]() ), properties: _* )
+
   def +( edge: (T, T) ): Graph[T] = {
-    if ( ( this.is( simple ) ) && ( edge._1 equals edge._2 ) ) {
+    if ( ( this is simple ) && ( edge._1 equals edge._2 ) ) {
       throw new IllegalArgumentException( "Cannot add loops to simple graph" )
     } else {
       val v = this.add( edge._1 ).add( edge._2 ).plus( edge._1, edge._2 )
@@ -37,13 +36,12 @@ class HashGraph[T]( private val vertices: Map[T, Set[T]],
     new HashGraph[T]( vertices + ( a -> ( vs + b ) ), properties: _* )
   }
 
-  def getVerticesAdjacentTo( vertex: T ): Set[T] = {
+  def getVerticesAdjacentTo( vertex: T ): Set[T] =
     if ( this contains vertex )
       vertices getOrElse( vertex, Set[T]() )
     else
       throw new IllegalArgumentException(
         "Graph doesn't contain vertex '" + vertex + "'" )
-  }
 
   /*
   private type SubSquare = (Int, Int)
