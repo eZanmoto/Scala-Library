@@ -3,7 +3,8 @@ package com.ezanmoto.immutable.graph
 import GraphProperty._
 
 class HashGraph[T]( private val vertices: Map[T, Set[T]],
-                    private val properties: GraphProperty* ) extends Graph[T] {
+                    private val properties: GraphProperty* )
+    extends EdgeGraph[T] {
 
   require( this is cyclic, "HashGraph does not support non-cycles" )
 
@@ -11,15 +12,15 @@ class HashGraph[T]( private val vertices: Map[T, Set[T]],
 
   def contains( vertex: T ) = vertices contains vertex
 
-  def +( vertex: T ): Graph[T] = add( vertex )
+  def +( vertex: T ): EdgeGraph[T] = add( vertex )
 
   private def add( vertex: T ): HashGraph[T] =
-    if ( this.contains( vertex ) )
+    if ( this contains vertex )
       this
     else
       new HashGraph[T]( vertices + ( vertex -> Set[T]() ), properties: _* )
 
-  def +( edge: (T, T) ): Graph[T] = {
+  def +( edge: (T, T) ): EdgeGraph[T] = {
     if ( ( this is simple ) && ( edge._1 equals edge._2 ) ) {
       throw new IllegalArgumentException( "Cannot add loops to simple graph" )
     } else {
