@@ -2,8 +2,7 @@ package com.ezanmoto.immutable.graph
 
 import GraphProperty._
 
-/**
-  * A graph that contains points.
+/** A graph of points.
   *
   * Complexity:
   *   contains    O(n), map implements contains in O(1)

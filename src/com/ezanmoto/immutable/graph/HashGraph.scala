@@ -2,8 +2,7 @@ package com.ezanmoto.immutable.graph
 
 import GraphProperty._
 
-/**
-  * An adjacency list implementation of a graph.
+/** An adjacency list implementation of a graph.
   *
   * Complexity:
   *   contains    O(1), map implements contains in O(1)
