@@ -8,9 +8,9 @@ import GraphProperty._
   * Complexity:
   *   contains    O(1), map implements contains in O(1)
   *   + (vertex)  O(1), contains implemented in O(1)
-  *                  , map implements + in O(1)
+  *                   , map implements + in O(1)
   *   + (edge)    O(n), getVerticesAdjacentTo implemented in O(1)
-  *                  , set + implemented in O(n)
+  *                   , set + implemented in O(n)
   *   getVerticesAdjacentTo
   *               O(1), map implements getOrElse in O(1)
   *
@@ -33,21 +33,20 @@ class HashGraph[T]( private val vertices: Map[T, Set[T]],
     else
       new HashGraph[T]( vertices + ( vertex -> Set[T]() ), properties: _* )
 
-  def +( edge: (T, T) ): Graph[T] = {
-    if ( ( this is simple ) && ( edge._1 equals edge._2 ) ) {
+  def +( edge: (T, T) ): Graph[T] =
+    if ( ( this is simple ) && ( edge._1 equals edge._2 ) )
       throw new IllegalArgumentException( "Cannot add loops to simple graph" )
-    } else {
-      val v = this.+( edge._1 ).+( edge._2 ).addEdge( edge._1, edge._2 )
-      if ( this isNot directed )
-        v.addEdge( edge._2, edge._1 )
+    else {
+      val graph = this + edge._1 + edge._2 addEdge ( edge._1, edge._2 )
+      if ( this is directed )
+        graph
       else
-        v
+        graph addEdge( edge._2, edge._1 )
     }
-  }
 
   private def addEdge( a: T, b: T ): HashGraph[T] = {
-    val vs = getVerticesAdjacentTo( a )
-    new HashGraph[T]( vertices + ( a -> ( vs + b ) ), properties: _* )
+    val adjacents = getVerticesAdjacentTo( a )
+    new HashGraph[T]( vertices + ( a -> ( adjacents + b ) ), properties: _* )
   }
 
   def getVerticesAdjacentTo( vertex: T ): Set[T] =

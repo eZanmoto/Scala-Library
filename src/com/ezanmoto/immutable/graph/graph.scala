@@ -2,7 +2,7 @@ package com.ezanmoto.immutable.graph
 
 import GraphProperty._
 
-trait Graph[T] {
+trait Graph[T] extends Immutable {
   def is( p: GraphProperty ): Boolean
   def isNot( p: GraphProperty ) = ! is( p )
   def +( vertex: T ): Graph[T]
