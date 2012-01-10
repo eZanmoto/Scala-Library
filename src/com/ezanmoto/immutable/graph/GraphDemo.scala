@@ -11,5 +11,9 @@ object GraphDemo {
     val pgraph = new PointGraph + ( 0, 0 ) + ( 1, 1 ) + ( 3, 4 )
     println( pgraph contains ( 1, 1 ) )
     println( pgraph contains ( 2, 2 ) )
+    for ( v <- BreadthFirstIterator over graph from "a" )
+      println( "Element: " + v )
+    for ( v <- DepthFirstIterator over graph from "a" )
+      println( "Element: " + v )
   }
 }

@@ -45,8 +45,8 @@ class HashGraph[T]( private val vertices: Map[T, Set[T]],
     }
 
   private def addEdge( a: T, b: T ): HashGraph[T] = {
-    val adjacents = getVerticesAdjacentTo( a )
-    new HashGraph[T]( vertices + ( a -> ( adjacents + b ) ), properties: _* )
+    val neighbours = getVerticesAdjacentTo( a )
+    new HashGraph[T]( vertices + ( a -> ( neighbours + b ) ), properties: _* )
   }
 
   def getVerticesAdjacentTo( vertex: T ) =
