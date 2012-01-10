@@ -7,6 +7,7 @@ trait Graph[T] extends Immutable {
   def isNot( p: GraphProperty ) = ! is( p )
   def +( vertex: T ): Graph[T]
   def +( edge: (T, T) ): Graph[T]
+  def contains( vertex: T ): Boolean
   def getVerticesAdjacentTo( v: T ): Set[T]
 }
 

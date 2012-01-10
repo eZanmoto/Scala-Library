@@ -33,7 +33,7 @@ class HashGraph[T]( private val vertices: Map[T, Set[T]],
     else
       new HashGraph[T]( vertices + ( vertex -> Set[T]() ), properties: _* )
 
-  def +( edge: (T, T) ): Graph[T] =
+  def +( edge: (T, T) ): HashGraph[T] =
     if ( ( this is simple ) && ( edge._1 equals edge._2 ) )
       throw new IllegalArgumentException( "Cannot add loops to simple graph" )
     else {
@@ -49,7 +49,7 @@ class HashGraph[T]( private val vertices: Map[T, Set[T]],
     new HashGraph[T]( vertices + ( a -> ( adjacents + b ) ), properties: _* )
   }
 
-  def getVerticesAdjacentTo( vertex: T ): Set[T] =
+  def getVerticesAdjacentTo( vertex: T ) =
     if ( this contains vertex )
       vertices getOrElse( vertex, Set[T]() )
     else
