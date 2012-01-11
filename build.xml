@@ -4,7 +4,7 @@
     <property environment="env"/>
 
     <property name="main.class"
-              value="com.ezanmoto.immutable.graph.GraphDemo"/>
+              value="com.ezanmoto.immutable.graph.full.GraphDemo"/>
 
     <property name="production.src" value="src"/>
 
