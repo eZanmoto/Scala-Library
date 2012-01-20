@@ -15,5 +15,9 @@ object GraphDemo {
       println( "Element: " + v )
     for ( v <- DFS over graph from "a" )
       println( "Element: " + v )
+    val wgraph = new WeightedHashGraph[String,Int]( cyclic ).+( "a" -> "b", 4 )
+                                                .+( "b" -> "d", 1 )
+                                                .+( "a" -> "c", 2 )
+    println( "Element: " + "b" + ", Cost: " + ( wgraph weightOf ("a", "b") ) )
   }
 }
