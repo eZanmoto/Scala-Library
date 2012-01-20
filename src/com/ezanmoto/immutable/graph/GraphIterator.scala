@@ -14,7 +14,7 @@ object BFS {
     def decapitate() = dequeue()
   }
 
-  def over[T]( graph: Graph[T] ) = new GraphIterator( graph, new Queue_[T]() )
+  def over[T]( g: GraphLike[T] ) = new GraphIterator( g, new Queue_[T]() )
 }
 
 /** Depth First Search
@@ -31,7 +31,7 @@ object DFS {
     def decapitate() = pop()
   }
 
-  def over[T]( graph: Graph[T] ) = new GraphIterator( graph, new Stack_[T]() )
+  def over[T]( g: GraphLike[T] ) = new GraphIterator( g, new Stack_[T]() )
 }
 
 trait Container[T] {
@@ -40,7 +40,7 @@ trait Container[T] {
   def isEmpty: Boolean
 }
 
-class GraphIterator[T]( private val graph: Graph[T],
+class GraphIterator[T]( private val graph: GraphLike[T],
                         private val queue: Container[T] ) {
 
   def from( vertex: T ) =
