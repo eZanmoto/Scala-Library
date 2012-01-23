@@ -15,13 +15,22 @@ object GraphDemo {
       println( "Element: " + v )
     for ( v <- DFS over graph from "a" )
       println( "Element: " + v )
-    val wgraph = new WeightedHashGraph[String,Int]( cyclic ).+( "a" -> "b", 4 )
-                                                .+( "b" -> "d", 1 )
-                                                .+( "a" -> "c", 2 )
-    for ( a <- DFS over wgraph from "a" )
+
+    val wgraph = new WeightedHashGraph[String,Int]( cyclic ).+( "u" -> "w", 5 )
+                                                            .+( "u" -> "v", 1 )
+                                                            .+( "u" -> "x", 2 )
+                                                            .+( "v" -> "w", 3 )
+                                                            .+( "x" -> "w", 4 )
+                                                            .+( "x" -> "y", 7 )
+                                                            .+( "w" -> "z", 6 )
+                                                            .+( "y" -> "z", 2 )
+    for ( a <- DFS over wgraph from "u" )
       for ( b <- wgraph getVerticesAdjacentTo a ) {
         val edge = ( a, b )
-        println( "Weight of " + edge + ": " + ( wgraph weightOf edge ) )
+        println( "[dfs] Weight of " + edge + ": " + ( wgraph weightOf edge ) )
       }
+
+    for ( edge <- BellmanFord of wgraph from "u" to "z" )
+        println( "[b-f] Weight of " + edge + ": " + ( wgraph weightOf edge ) )
   }
 }

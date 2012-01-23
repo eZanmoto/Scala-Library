@@ -3,8 +3,7 @@
 
     <property environment="env"/>
 
-    <property name="main.class"
-              value="com.ezanmoto.immutable.graph.GraphDemo"/>
+    <property name="main.pkg"       value="com.ezanmoto"/>
 
     <property name="production.src" value="src"/>
 
@@ -39,7 +38,12 @@
     </target>
 
     <target name="run" depends="compile">
-        <java classname="${main.class}" classpathref="build.classpath"/>
+        <java classname="${main.pkg}.immutable.graph.GraphDemo"
+              classpathref="build.classpath"/>
+        <java classname="${main.pkg}.immutable.graph.full.GraphDemo"
+              classpathref="build.classpath"/>
+        <java classname="${main.pkg}.sequence.SequenceDemo"
+              classpathref="build.classpath"/>
     </target>
 
 </project>
