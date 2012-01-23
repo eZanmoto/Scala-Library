@@ -31,9 +31,9 @@ class WeightedHashGraph[T, Int] ( private val graph: Graph[T]
   def +( edge: (T, T), weight: Int ): WeightedHashGraph[T, Int] =
     new WeightedHashGraph( graph + edge, 
       if ( this is directed )
-        weights + ( edge -> weight ) + ( ( edge._2 -> edge._1 ) -> weight )
-      else
         weights + ( edge -> weight )
+      else
+        weights + ( edge -> weight ) + ( ( edge._2 -> edge._1 ) -> weight )
     )
 
   /** O(1), Map implements contains in O(1)
