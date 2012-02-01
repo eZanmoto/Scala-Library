@@ -1,17 +1,14 @@
 package com.ezanmoto.immutable.graph.full
 
 import com.ezanmoto.immutable.graph.BFS
-import com.ezanmoto.immutable.graph.GraphProperty._
 
 class HashGraph[T]( private val adjacent: com.ezanmoto.immutable.graph.Graph[T]
                   , private val incident: com.ezanmoto.immutable.graph.Graph[T]
-                  , private val lastVertex: Option[T]
-                  , private val properties: GraphProperty* ) extends Graph[T] {
+                  , private val lastVertex: Option[T] ) extends Graph[T] {
 
-  def this() = this( com.ezanmoto.immutable.graph.Graph[T]( cyclic )
-                   , com.ezanmoto.immutable.graph.Graph[T]( cyclic )
-                   , None
-                   , cyclic )
+  def this() = this( com.ezanmoto.immutable.graph.UndirectedGraph[T]()
+                   , com.ezanmoto.immutable.graph.UndirectedGraph[T]()
+                   , None )
 
   private var nv = 0
   private var ne = 0
@@ -25,20 +22,16 @@ class HashGraph[T]( private val adjacent: com.ezanmoto.immutable.graph.Graph[T]
   private val numVertices = nv
   private val numEdges = ne
 
-  /** O(n), Graph implements is in O(n) */
-  def is( p: GraphProperty ) = adjacent is p
-
   /** O(1), Graph implements contains in O(1) */
   def contains( v: T ) = adjacent contains v
 
   /** O(1), Graph implements + in O(1) */
   def +( v: T ): HashGraph[T] =
-    new HashGraph[T]( adjacent + v, incident, Some( v ), properties: _* )
+    new HashGraph[T]( adjacent + v, incident, Some( v ) )
 
   /** O(2n), Graph implements + in O(n) */
   def +( e: (T, T) ): HashGraph[T] =
-    new HashGraph[T]( adjacent + e, incident + ( e._2, e._1 )
-                    , Some( e._1 ), properties: _* )
+    new HashGraph[T]( adjacent + e, incident + ( e._2, e._1 ), Some( e._1 ) )
 
   /** O(1), Graph implements getVerticesAdjacentTo in O(1) */
   def getVerticesAdjacentTo( v: T ) = adjacent getVerticesAdjacentTo v
@@ -50,8 +43,9 @@ class HashGraph[T]( private val adjacent: com.ezanmoto.immutable.graph.Graph[T]
   def isSubgraphOf( graph: Graph[T] ): Boolean = {
     for ( v <- BFS over this from ( lastVertex get ) ) // O(|V||E|n)
       if ( graph contains v ) {
-        val neighbours = graph getVerticesAdjacentTo v
-        for ( e <- ( this getVerticesAdjacentTo v ) ) // O(|E|n)
+        val neighbours = graph getVerticesAdjacentTo v get
+        val edges = ( this getVerticesAdjacentTo v get )
+        for ( e <- edges ) // O(|E|n)
           if ( ! ( neighbours contains e ) ) // O(n)
             return false
       } else
@@ -79,19 +73,71 @@ class HashGraph[T]( private val adjacent: com.ezanmoto.immutable.graph.Graph[T]
   }
     */
 
-  val isDirectedForest = idf
+  private var isC: Option[Boolean] = None
+
+  private def isCyclic = isC match {
+    case Some( v ) => v
+    case None => lastVertex match {
+      case Some( vertex ) => {
+        var discovered = Set[T]()
+        var isC = false
+        for ( v <- BFS over this from vertex )
+          if ( discovered contains v )
+            isC = true
+          else
+            discovered = discovered + v
+        isC
+      }
+      case None => false
+    }
+  }
+
+  private var isDF: Option[Boolean] = None
 
   /** O(|V|), indegree implemented in O(1) */
-  def idf: Boolean = {
-    if ( this is cyclic )
-      return false
-    else {
-      for ( v <- BFS over this from ( lastVertex get ) )
-        if ( ( this indegreeOf v ) > 1 )
-          return false
+  val isDirectedForest = isDF match {
+    case Some( b ) => b
+    case None => lastVertex match {
+      case Some( vertex ) =>
+        if ( this isCyclic )
+          false
+        else {
+          var isDF = true
+          for ( v <- BFS over this from vertex )
+            if ( ( this indegreeOf v get ) > 1 )
+              isDF = false
+          isDF
+        }
+      case None => true
     }
-    return true
   }
 
   val isDirectedTree = numEdges == ( numVertices - 1 )
+
+  private var isR: Option[Boolean] = None
+
+  val isRegular = isR match {
+    case Some( b ) => b
+    case None => lastVertex match {
+      case Some( vertex ) => {
+        val degree = this degreeOf vertex
+        var isR = true
+        for ( v <- BFS over this from vertex )
+          if ( ( this degreeOf v ) != degree )
+            isR = false
+        isR
+      }
+      case None => true
+    }
+  }
+
+  private var isN: Option[Boolean] = None
+
+  val isNull = isN match {
+    case Some( b ) => b
+    case None => lastVertex match {
+      case Some( vertex ) => ( this vertexIsIsolated vertex get ) && isRegular
+      case None => true
+    }
+  }
 }

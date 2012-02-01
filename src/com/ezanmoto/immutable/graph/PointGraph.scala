@@ -1,7 +1,5 @@
 package com.ezanmoto.immutable.graph
 
-import GraphProperty._
-
 /** A graph of points.
   *
   * Complexity:
@@ -13,13 +11,13 @@ import GraphProperty._
   */
 class PointGraph( private val graph: Graph[Double] ) {
 
-  def this() = this( Graph[Double]( directed, cyclic ) )
+  def this() = this( DirectedGraph[Double]() )
 
   def +( point: (Double, Double) ) = new PointGraph( graph + point )
 
   def contains( point: (Double, Double) ) =
-    if ( graph contains point._1 )
-      ( graph getVerticesAdjacentTo point._1 ) contains point._2
-    else
-      false
+    graph getVerticesAdjacentTo point._1 match {
+      case Some( set ) => set contains point._2
+      case None => false
+    }
 }

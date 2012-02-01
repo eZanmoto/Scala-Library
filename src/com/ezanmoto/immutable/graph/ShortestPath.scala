@@ -9,10 +9,10 @@ class ShortestPaths[T]( graph: WeightedGraph[T, Int] ) {
     var distances = Map[T, (T, Int)]() + ( vertex -> ( vertex, 0 ) )
     for ( v <- BFS over graph from vertex ) {
       val sourceCost = ( distances get v ).get._2
-      val neighbours = graph getVerticesAdjacentTo v
+      val neighbours = ( graph getVerticesAdjacentTo v get )
       for ( neighbour <- neighbours ) {
         val dest   = distances get neighbour
-        val weight = sourceCost + ( graph weightOf ( v, neighbour ) )
+        val weight = sourceCost + ( graph weightOf ( v, neighbour ) get )
         if ( dest == None || weight < dest.get._2 )
           distances = distances + ( neighbour -> ( v, weight ) )
       }

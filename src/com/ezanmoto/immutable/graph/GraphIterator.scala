@@ -40,6 +40,13 @@ trait Container[T] {
   def isEmpty: Boolean
 }
 
+/** A graph iterator returns the vertices of a graph as they are discovered.
+  *
+  * Why not return the edges? That is because if there are two links to a
+  * vertex, that vertex will only be discovered once, and so only one of those
+  * edges will be found. The traversal will visit all vertices, and calling
+  * getVerticesAdjacentTo on each vertex will ensure all edges are retrieved.
+  */
 class GraphIterator[T]( private val graph: GraphLike[T],
                         private val queue: Container[T] ) {
 
@@ -66,8 +73,8 @@ class GraphIterator[T]( private val graph: GraphLike[T],
 
       def next =
         if ( hasNext ) {
-          val next = queue decapitate
-          val neighbours = graph getVerticesAdjacentTo next 
+          val next = ( queue decapitate )
+          val neighbours = ( graph getVerticesAdjacentTo next get )
           for ( neighbour <- neighbours )
             if ( ! ( discovered contains neighbour ) )
               this enqueue neighbour
