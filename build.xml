@@ -50,6 +50,8 @@
               classpathref="build.classpath"/>
         <java classname="${main.pkg}.immutable.graph.full.GraphDemo"
               classpathref="build.classpath"/>
+        <java classname="${main.pkg}.immutable.grid.GridDemo"
+              classpathref="build.classpath"/>
         <java classname="${main.pkg}.sequence.SequenceDemo"
               classpathref="build.classpath"/>
     </target>

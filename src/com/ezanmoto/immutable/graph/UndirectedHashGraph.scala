@@ -19,7 +19,7 @@ class UndirectedHashGraph[T]( private val vertices: Map[T, Set[T]] )
     if ( this contains vertex )
       this
     else
-      new UndirectedHashGraph( vertices + ( vertex -> Set[T]() ) )
+      new UndirectedHashGraph[T]( vertices + ( vertex -> Set[T]() ) )
 
   /** O(n), getVerticesAdjacentTo implemented in O(1)
     *     , ++ implemented in O(n)
@@ -38,7 +38,7 @@ class UndirectedHashGraph[T]( private val vertices: Map[T, Set[T]] )
       case None => throw new IllegalStateException(
         "Graph should have a vertex '" + a + "'" )
     }
-    new UndirectedHashGraph( vertices + ( a -> ( neighbours + b ) ) )
+    new UndirectedHashGraph[T]( vertices + ( a -> ( neighbours + b ) ) )
   }
 
   /** O(1), Map implements get in O(1) */
